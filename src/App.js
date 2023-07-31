@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import foods from "./foods.json";
 import { useState } from "react";
 import FoodBox from './components/FoodBox';
-import { Row, Divider, Button } from 'antd';
+import { Row, Divider } from 'antd';
 import AddFoodForm from './components/AddFoodForm';
 import Search from './components/Search';
 import './App.css';
@@ -17,21 +17,26 @@ function App() {
     setSearchItem(updatedFoods);
   }
 
+  const deleteFood = (foodName) => {
+    const filteredFoods = foodItem.filter((item) => item.name !== foodName);
+    setFoodItem(filteredFoods);
+    setSearchItem(filteredFoods);
+  };
+
   return (
     <div className="App">
-    <AddFoodForm addFood={addFood}/>
-    <Search searchItem={searchItem} setSearchItem={setSearchItem}/>
-    <Divider>Food List</Divider>
-    <Row style={{ width: '100%', justifyContent: 'center' }}>
-    {foodItem.map(food => (
+      <AddFoodForm addFood={addFood} />
+      <Search foodItem={foodItem} setSearchItem={setSearchItem} />
+      <Divider>Food List</Divider>
+      <Row style={{ width: '100%', justifyContent: 'center' }}>
+        {searchItem.map(food => (
           <div key={uuidv4()}>
-          <FoodBox food={food} foodItem={foodItem} setFoodItem={setFoodItem} />
+            <FoodBox food={food} deleteFood={deleteFood} />
           </div>
         ))}
-    </Row>
+      </Row>
     </div>
   );
 }
-
 
 export default App;
